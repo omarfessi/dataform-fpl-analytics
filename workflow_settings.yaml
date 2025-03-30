@@ -1,5 +1,5 @@
 defaultProject: fantasy-open-analytics
-defaultLocation: EU
-defaultDataset: dataform
+defaultLocation: europe-west1
+defaultDataset: fpl_datamart
 defaultAssertionDataset: dataform_assertions
 dataformCoreVersion: 3.0.0

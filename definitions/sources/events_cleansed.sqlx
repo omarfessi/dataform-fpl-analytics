@@ -1,0 +1,5 @@
+config {
+  type: "declaration",
+  schema: "fantasy_premier_league",
+  name: "events_cleansed"
+}

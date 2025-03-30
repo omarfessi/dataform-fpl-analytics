@@ -1,0 +1,21 @@
+config {
+  type: "table",
+  schema: "fpl_datamart",
+  name: "flat_events",
+  description: "Flat version of events table"
+}
+
+SELECT
+  event_id AS gameweek_id,
+  event_date AS gameweek_date,
+  highest_fplmanager_score AS gameweek_highest_fplmanager_score,
+  average_fplmanager_score AS gameweek_average_fplmanager_score,
+  fplmanagers_count AS gameweek_fplmanagers_count,
+  transfers_made AS gameweek_transfers_made,
+  flat.element.chip_name AS gameweek_played_chip_name,
+  flat.element.num_played AS gameweek_played_chip_count,
+  ingestion_time
+FROM
+  ${ref("events_cleansed")} as ec
+
+CROSS JOIN UNNEST(ec.chips_played.list) as flat  

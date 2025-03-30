@@ -1,0 +1,28 @@
+config {
+  type: "table",
+  schema: "fpl_datamart",
+  name: "chips_played_percentage_per_gameweek",
+  description: "Percentage of chips played per gameweek"
+}
+WITH percentages AS (
+  SELECT
+  gameweek_id,
+  gameweek_played_chip_name,
+  SAFE_DIVIDE(gameweek_played_chip_count, gameweek_fplmanagers_count)*100 perc
+FROM
+  ${ref("flat_events")})
+
+SELECT
+  gameweek_id,
+  COALESCE(MAX(CASE WHEN gameweek_played_chip_name = '3xc' THEN perc  END), 0) AS pct_3xc,
+  COALESCE(MAX(CASE WHEN gameweek_played_chip_name = 'bboost' THEN perc END), 0) AS pct_bboost,
+  COALESCE(MAX(CASE WHEN gameweek_played_chip_name = 'freehit' THEN perc END), 0) AS pct_freehit,
+  COALESCE(MAX(CASE WHEN gameweek_played_chip_name = 'wildcard' THEN perc END), 0) AS pct_wildcard
+FROM
+  percentages
+WHERE
+  gameweek_played_chip_name IN ('3xc', 'bboost', 'freehit', 'wildcard')
+GROUP BY
+  gameweek_id
+ORDER BY
+  gameweek_id
